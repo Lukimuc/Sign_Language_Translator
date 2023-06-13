@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+body {
+    background-image: url('pawel-czerwinski-prMn9KINLtI-unsplash.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.grid-container {
+    display: grid;
+    width: 80%;
+    grid-template-columns: repeat(12, 1fr);
+}
+
+.content {
+    grid-column: span 12; /* This allows the content to span the entire grid */
+    text-align: center;
+    color: white;
+}
+
+.heading {
+    font-size: 1.75em;
+    font-weight: 700;
+}
+
+
+.placeholder {
+    width: 500px;
+    height: 500px;
+    background: rgba(255, 255, 255, 0.3);
+    margin: 20px 0;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid rgba(255, 255, 255, 0.50);
+    border-radius: 10px;
+}
+
+.button {
+    background-color: #0087FF;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    margin-right: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    border-radius: 5px;
+    
+}
+
+.button:hover {
+    background-color: #006BCA;
+}
+
+@media screen and (max-width: 600px) {
+    .grid-container {
+        width: 90
+    }}
