@@ -1,22 +1,76 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-</head>
-<body>
-    <div class="grid-container">
-        <div class="grid-item content">
-            <h1 class="heading">Sign Language Translator</h1>
-            <div class="content-container">
-                <img src="Placeholder.jpg" class="image" alt="Description of the image">
-                <p class ="translationText">Placeholder</p>
+   <head>
+      <link rel="stylesheet" type="text/css" href="styles.css">
+   </head>
+   <body>
+      <div class="grid-container">
+         <div class="grid-item content">
+            <h1 class="heading">American Sign Language (ASL) Translator</h1>
+            <p>This website translates American Sign Language into text in real-time using your webcam. </p>
+            <br/></b>
+            <div id="container">
+               <video autoplay="true" id="videoElement">
+               </video>
+               <p style="background-color:white; color: black; border-radius: 5px; left: 30%; right: 30%; text-align: center; padding-top: 6px; padding-bottom: 6px;">Translation: <br/><i>{{Text}}</i></p>
+               <div id="instructions" style="text-align: left; color: rgb(255, 255, 255);">
+                  <b>Instructions</b>
+                  <ol>
+                     <li>Permit access to your	&#128247; and make sure to have appropriate &#128161; conditions.  </li>
+                     <li>Press spacebar to start the translation.  </li>
+                     <li>Watch the translation happen. &#10024;</li>
+                  </ol>
+               </div>
+               <button class="button" id="toggleButton" onclick="toggleVideostream()">Start Videostream</button>
+               <!-- <p class ="translationText">Translation: <br/><i>This will be the text</i></p>-->
             </div>
-            <div class="buttons">
-                <button class="button">UPLOAD IMAGE</button>
-                <button class="button">START VIDEOSTREAM</button>
-            </div>
-        </div>
-    </div>
-    <script src="script.js"></script>
-</body>
+         </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      <footer>
+         <p>&copy; 2023 ASL Translator | Practical Machine Learning @LMU <br/>
+            Team 1 (Annika Köhler, Jannik Wiese, Gabriel Knoll, Lukas Schneider, Christina Trossen)
+         </p>
+      </footer>
+      <script>
+         var isStreaming = false;
+         var videoElement = document.getElementById('videoElement');
+         var toggleButton = document.getElementById('toggleButton');
+         
+         function toggleVideostream() {
+           if (!isStreaming) {
+             // Check if getUserMedia is supported
+             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+               // Request permission to access video and audio
+               navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+                 .then(function(stream) {
+                   // Attach the stream to the video element
+                   videoElement.srcObject = stream;
+                   toggleButton.textContent = 'Stop Videostream';
+                   isStreaming = true;
+                 })
+                 .catch(function(error) {
+                   console.log('Error accessing media devices:', error);
+                 });
+             } else {
+               console.log('getUserMedia is not supported');
+             }
+           } else {
+             var stream = videoElement.srcObject;
+             var tracks = stream.getTracks();
+         
+             tracks.forEach(function(track) {
+               track.stop();
+             });
+         
+             videoElement.srcObject = null;
+             toggleButton.textContent = 'Start Videostream';
+             isStreaming = false;
+           }
+         }
+      </script>
+      <script src="script.js"></script>
+   </body>
 </html>
