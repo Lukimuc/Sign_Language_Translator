@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <link rel="stylesheet" type="text/css" href="styles.css">
+      <link rel="stylesheet" type="text/css" href="style/styles.css">
    </head>
    <body>
       <div class="grid-container">
@@ -21,7 +21,7 @@
                      <li>Watch the translation happen. &#10024;</li>
                   </ol>
                </div>
-               <button class="button" id="toggleButton" onclick="toggleVideostream()">Start Videostream</button>
+               <button class="button" id="toggleButton">Start Videostream</button>
                <!-- <p class ="translationText">Translation: <br/><i>This will be the text</i></p>-->
             </div>
          </div>
@@ -29,48 +29,11 @@
       </div>
       </div>
       </div>
-      <footer>
+      <footer> <!-- TODO: Footer overlaps button! -->
          <p>&copy; 2023 ASL Translator | Practical Machine Learning @LMU <br/>
             Team 1 (Annika Köhler, Jannik Wiese, Gabriel Knoll, Lukas Schneider, Christina Trossen)
          </p>
       </footer>
-      <script>
-         var isStreaming = false;
-         var videoElement = document.getElementById('videoElement');
-         var toggleButton = document.getElementById('toggleButton');
-         
-         function toggleVideostream() {
-           if (!isStreaming) {
-             // Check if getUserMedia is supported
-             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-               // Request permission to access video and audio
-               navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-                 .then(function(stream) {
-                   // Attach the stream to the video element
-                   videoElement.srcObject = stream;
-                   toggleButton.textContent = 'Stop Videostream';
-                   isStreaming = true;
-                 })
-                 .catch(function(error) {
-                   console.log('Error accessing media devices:', error);
-                 });
-             } else {
-               console.log('getUserMedia is not supported');
-             }
-           } else {
-             var stream = videoElement.srcObject;
-             var tracks = stream.getTracks();
-         
-             tracks.forEach(function(track) {
-               track.stop();
-             });
-         
-             videoElement.srcObject = null;
-             toggleButton.textContent = 'Start Videostream';
-             isStreaming = false;
-           }
-         }
-      </script>
-      <script src="script.js"></script>
+      <script src="js/script.js"></script>
    </body>
 </html>
