@@ -2,38 +2,87 @@
 <html>
    <head>
       <link rel="stylesheet" type="text/css" href="style/styles.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+      <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script> 
+      <link rel="icon" href="img/favicon.png">
+      <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.1/camera_utils.js" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils@0.1/control_utils.js" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.2/drawing_utils.js" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.1/hands.js" crossorigin="anonymous"></script>
    </head>
    <body>
+      <nav>
+         <div class="nav-wrapper" style="padding: 0 20px;
+            display: flex;
+            align-items: center;
+            background-image: url('./img/logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 400px; 
+            height: 50px;">
+            <a href="#" class="brand-logo"></a>
+            <ul id="nav-mobile" class="right">
+               <li><a href="#"></a></li>
+            </ul>
+         </div>
+      </nav>
       <div class="grid-container">
-         <div class="grid-item content">
+         <div class="grid-item-left content">
             <h1 class="heading">American Sign Language (ASL) Translator</h1>
-            <p>This website translates American Sign Language into text in real-time using your webcam. </p>
-            <br/></b>
-            <div id="container">
-               <video autoplay="true" id="videoElement">
-               </video>
-               <p style="background-color:white; color: black; border-radius: 5px; left: 30%; right: 30%; text-align: center; padding-top: 6px; padding-bottom: 6px;">Translation: <br/><i>{{Text}}</i></p>
-               <div id="instructions" style="text-align: left; color: rgb(255, 255, 255);">
-                  <b>Instructions</b>
-                  <ol>
-                     <li>Permit access to your	&#128247; and make sure to have appropriate &#128161; conditions.  </li>
-                     <li>Press spacebar to start the translation.  </li>
-                     <li>Watch the translation happen. &#10024;</li>
-                  </ol>
+            <p>Translate American Sign Language into text in real-time using your webcam.</p>
+            <br/>
+            <div class="video-container">
+               <div id="textOverlay">
+                  <div style="height: 100%; width: 100%; display: flex; justify-content: center; align-items:center; color:white;">
+              
+               <p>Click button below to start camera.</p>
+            </div>
+         </div>
+               <video autoplay playsinline class="input_video3" style="z-index:-1; display: none;"></video>
+             
+               <canvas class="output3"id="videoElement" >
+              </canvas>
+            </div>
+            <p id="outputElement">Translation: <br/><i>{{Text}}</i></p>
+            <button class="button" id="tb">Start Videostream</button>
+         </div>
+         <div class="grid-item-right instructions">
+            <div class="heading">Instructions</div>
+            <ol>
+               <div class="instruction-header">1. Permit access to your   <span class="material-symbols-rounded">
+                  videocam
+                  </span>
                </div>
-               <button class="button" id="toggleButton">Start Videostream</button>
-               <!-- <p class ="translationText">Translation: <br/><i>This will be the text</i></p>-->
+               Make sure to have appropriate light conditions.
+               <br/>  
+               <div class="instruction-header">2. Press <span class="material-symbols-rounded">
+                  space_bar
+                  </span> to start translation</li>
+               </div>
+               After pressing the space bar, make sure to only use one hand.
+               <br/> 
+               <div class="instruction-header">3. Watch the   <span class="material-symbols-rounded">
+                  hand_gesture
+                  </span> translation happen</li>
+               </div>
+               In cases of bad lighting, the translation can be inaccurate.
+            </ol>
+            <div class="heading">Used Datasets</div>
+            <p>Google ASL Fingerspelling Competition: https://www.kaggle.com/competitions/asl-fingerspelling/data</p>
+            <div>
+            </div>
+            <div class="loading">
+               <div class="spinner"></div>
+            </div>
+            <div style="display: none;" class="control3">
             </div>
          </div>
       </div>
-      </div>
-      </div>
-      </div>
-      <footer> <!-- TODO: Footer overlaps button! -->
+      <div class="footer">
          <p>&copy; 2023 ASL Translator | Practical Machine Learning @LMU <br/>
             Team 1 (Annika Köhler, Jannik Wiese, Gabriel Knoll, Lukas Schneider, Christina Trossen)
          </p>
-      </footer>
-      <script src="js/script.js"></script>
+      </div>
+      <script type="text/javascript" src="js/hands.js"></script>
    </body>
 </html>
