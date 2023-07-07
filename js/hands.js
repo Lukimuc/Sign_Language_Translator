@@ -1,3 +1,5 @@
+import { predictWebcam } from "./arms.js"
+
 const WIDTH = 1280;
 const HEIGHT = 720;
 const video3 = document.getElementsByClassName('input_video3')[0];
@@ -102,6 +104,7 @@ async function toggleVideostream() {
         hands.onResults(onResultsHands);
         const camera = new Camera(video3, {
           onFrame: async () => {
+            predictWebcam(video3)
             await hands.send({ image: video3 });
           },
           width: WIDTH,
