@@ -1,4 +1,5 @@
-import { predictWebcam } from "./arms.js"
+import { poseLandmarksForVideo } from "./arms.js"
+import { handLandmarksForVideo } from "./handLandmarker.js"
 
 const WIDTH = 1280;
 const HEIGHT = 720;
@@ -63,15 +64,14 @@ function onResultsHands(results) {
     canvasCtx3.restore();
   }
 
-const tb = document.getElementById('tb');
-tb.addEventListener('click', toggleVideostream);
+
 const hands = new Hands({
   locateFile: (file) => {
     return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.1/${file}`;
   },
 });
 
-async function toggleVideostream() {
+export async function toggleVideostream() {
   if (isStreaming) {
     // Stop the video stream
     const stream = video3.srcObject;
@@ -104,8 +104,17 @@ async function toggleVideostream() {
         hands.onResults(onResultsHands);
         const camera = new Camera(video3, {
           onFrame: async () => {
-            predictWebcam(video3)
-            await hands.send({ image: video3 });
+            const results = await Promise.all([
+              poseLandmarksForVideo(video3),
+              handLandmarksForVideo(video3)
+              //hands.send({ image: video3 })
+            ])
+            const poseLandmarks = await results[0]
+            const handLandmarks = await results[1]
+            console.log("poseLandmarks: ")
+            console.log(poseLandmarks)
+            console.log("handLandmarks: ")
+            console.log(handLandmarks)
           },
           width: WIDTH,
           height: HEIGHT,
