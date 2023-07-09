@@ -1,5 +1,6 @@
 import { poseLandmarksForVideo } from "./arms.js"
 import { handLandmarksForVideo } from "./handLandmarker.js"
+import { submitSample } from "./connector.js";
 
 const WIDTH = 1280;
 const HEIGHT = 720;
@@ -111,10 +112,13 @@ export async function toggleVideostream() {
             ])
             const poseLandmarks = await results[0]
             const handLandmarks = await results[1]
-            console.log("poseLandmarks: ")
-            console.log(poseLandmarks)
-            console.log("handLandmarks: ")
-            console.log(handLandmarks)
+            // console.log("timestamp: ")
+            // console.log(poseLandmarks.timestamp)
+            // console.log("poseLandmarks: ")
+            // console.log(poseLandmarks.landmarks)
+            // console.log("handLandmarks: ")
+            // console.log(handLandmarks)
+            submitSample(poseLandmarks, handLandmarks, poseLandmarks.timestamp)
           },
           width: WIDTH,
           height: HEIGHT,

@@ -28,7 +28,11 @@ export async function poseLandmarksForVideo(video) {
         lastVideoTime = video.currentTime;
         try {
             poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
-                resolve(result)
+                const resultWithTime = {
+                    timestamp: startTimeMs,
+                    landmarks: result
+                }
+                resolve(resultWithTime)
             });
         } catch(error) {
             reject(error)
