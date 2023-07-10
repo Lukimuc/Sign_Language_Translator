@@ -1,11 +1,19 @@
-var sampleDict = {}
+import { preprocessing } from "./preprocessing.js"
+
+var sampleDict = []
 var dictCounter = 0
 
 export function submitSample(poseLandmarks, handLandmarks, timestamp) {
     const sampleArray = constructArray(poseLandmarks, handLandmarks, timestamp)
-    sampleDict[timestamp] = sampleArray
+    sampleDict[dictCounter] = sampleArray
     dictCounter += 1
-    console.log(sampleDict[timestamp])
+    if (dictCounter == 99) {
+        console.log("submit batch")
+        console.log(sampleDict)
+        let preprocessedData = preprocessing(sampleDict)
+        sampleDict = []
+        dictCounter = 0 
+    }
 }
 
 function constructArray(poseLandmarks, handLandmarks, timestamp) {
@@ -14,7 +22,7 @@ function constructArray(poseLandmarks, handLandmarks, timestamp) {
 
     if (handLandmarks.handednesses.length == 1) {
         const handZero = handLandmarks.handednesses[0][0].categoryName        
-        console.log(handZero)
+        //console.log(handZero)
         if (handZero == "Right") {
             extractHandLandmarks(rightHandX, rightHandY, rightHandZ, handLandmarks.landmarks[0])
         } else if (handZero == "Left") {
