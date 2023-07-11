@@ -1,5 +1,5 @@
 import { DrawingUtils, HandLandmarker, PoseLandmarker } from "https://cdn.skypack.dev/@mediapipe/tasks-vision@0.10.0";
-import { poseLandmarksForVideo } from "./arms.js"
+import { poseLandmarksForVideo } from "./armLandmarker.js"
 import { handLandmarksForVideo } from "./handLandmarker.js"
 import { submitSample } from "./connector.js";
 
