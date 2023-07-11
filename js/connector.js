@@ -9,8 +9,9 @@ export function submitSample(poseLandmarks, handLandmarks, timestamp) {
     dictCounter += 1
     if (dictCounter == 99) {
         console.log("submit batch")
-        console.log(sampleDict)
+        //console.log(sampleDict)
         let preprocessedData = preprocessing(sampleDict)
+        console.log(preprocessedData);
         sampleDict = []
         dictCounter = 0 
     }
@@ -66,7 +67,7 @@ function extractPoseLandmarks(x, y, z, landmarks) {
 }
 
 function generateNaNArray(length) {
-   return Array.from({ length: length }, () => NaN)
+   return Array.from({ length: length }, () => 'NaN')
 }
 
 function range(size, startAt = 0) {

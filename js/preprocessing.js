@@ -54,16 +54,16 @@ export function createExampleData() {
     return data;
 }
 
-function interpolate(data, counter, index) {
-
-
-}
 
 export function preprocessing(data) {
     const leftHandIdx = 0, poseIdx = 21, rightHandIdx = 27;
     let counterLeft = 0, counterPose=0, counterRight=0;
     let firstLeftWasNan = false, firstRightWasNan = false, firstPoseWasNan = false;
-    let row, prepRow
+    let row, prepRow;
+
+    for(let i = 0; i < data.length; i++){
+        data[i].shift();
+    }
 
     for (let i = 0; i < data.length; i++) {
         row = data[i];
@@ -249,6 +249,7 @@ export function preprocessing(data) {
 
 function init() {
     let data = createExampleData();  // TODO: Data should be the recorded data from the other files.
+    data = preprocessing(data);
 //data = preprocessing(data);
     console.log(data);
 }
