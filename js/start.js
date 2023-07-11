@@ -91,12 +91,8 @@ function drawResults(handLandmarks, poseLandmarks) {
     for (const landmark of poseLandmarks.landmarks.landmarks) {
         drawingUtils.drawLandmarks(landmark, {
             radius: (data) => {
-                if (data.index >= 11 && data.index <= 16) {
-                    return DrawingUtils.lerp(data.z, -0.15, 0.1, 5, 1)
-                } else {
-                    return (0, 0, 0, 0)
-                }
-            },
+                return DrawingUtils.lerp(data.z, -0.15, 0.1, 5, 1)
+            }
         });
 
         const cons = PoseLandmarker.POSE_CONNECTIONS
