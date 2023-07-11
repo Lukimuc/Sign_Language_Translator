@@ -1,5 +1,7 @@
 import { preprocessing } from "./preprocessing.js"
 
+const BATCH_SIZE = 100
+
 var sampleDict = []
 var dictCounter = 0
 
@@ -7,7 +9,7 @@ export function submitSample(poseLandmarks, handLandmarks, timestamp) {
     const sampleArray = constructArray(poseLandmarks, handLandmarks, timestamp)
     sampleDict[dictCounter] = sampleArray
     dictCounter += 1
-    if (dictCounter == 99) {
+    if (dictCounter == BATCH_SIZE) {
         console.log("submit batch")
         console.log(sampleDict)
         let preprocessedData = preprocessing(sampleDict)

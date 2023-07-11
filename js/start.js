@@ -100,7 +100,6 @@ function drawResults(handLandmarks, poseLandmarks) {
         });
 
         const cons = PoseLandmarker.POSE_CONNECTIONS
-        console.log(cons)
         const connectionArray = [cons[10], cons[11], cons[16], cons[17]]
         drawingUtils.drawConnectors(landmark, connectionArray);
     }
