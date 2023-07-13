@@ -1,6 +1,10 @@
 const translationText = document.getElementById('outputElement');
+let model = undefined;
+let loadingModel = false;
 
-const model = await tf.loadGraphModel('./models/ASLPredictor/model.json');
+async function loadModel() {
+    return await tf.loadGraphModel('./models/ASLPredictor/model.json');
+}
 
 const indexToChars = {};
 fetch('./json/character_to_prediction_index.json')
@@ -20,31 +24,46 @@ function getindexToCharJson(charsToIndex){
     }
 }
 
-function predictTransformer(signs, context) {
+async function predictTransformer(signs, context) {
+    // const model = await tf.loadGraphModel('./models/ASLPredictor/model.json');
     let tens = tf.tidy(()  => {
         let asTensor = tf.tensor(signs);
         return asTensor.reshape([-1, asTensor.shape[0], asTensor.shape[1]]);
     });
 
     let ctens = tf.tidy(() => {
-        let asTensor = tf.tensor(context).cast('int32');
+        let asTensor = tf.tensor(context);
         return asTensor.reshape([-1, asTensor.shape[0]]);
     });
 
-    tens.print();
-    ctens.print();
+    console.log(tens);
+    console.log(ctens);
+    model.inputNodes.forEach(node => console.log(node));
 
-    tens = tf.ones([1, 900, 144]);
-    ctens = tf.ones([1, 100]).cast('int32');
     
-    return Array.from(
-        model.predict([tens, ctens], {
-            batchSize: 1,
-        }).dataSync()); // Maybe this works ...
+    return model.predict({
+                'input_1': tens,
+                'input_2': ctens
+            }, {
+                batchSize: 1,
+            }).dataSync(); // Maybe this works ...
 }
 
 
 export function translateToText(mediapipeData){
+    if(model === undefined) {
+        if (!loadingModel) {
+            loadingModel = true;
+            loadModel().then((loaded) => {
+                model = loaded;
+                loadingModel = false;
+                console.log(model);
+            });
+        }
+        console.log('Model not initialized');
+        return;
+    }
+
     let text = [60];
     let textPhrase ="";
     let nextI = 1;
@@ -53,12 +72,15 @@ export function translateToText(mediapipeData){
         text.push(59);
     }
     while(maxIdx !== 59) { 
-        console.log(mediapipeData);
-        console.log(text);
+        // console.log(mediapipeData);
+        // console.log(text);
         // let results = model.predict([mediapipeData, text]);
-        let results = predictTransformer(mediapipeData, text);
-        console.log('##############################################################');
-        console.log(results);
+        predictTransformer(mediapipeData, text).then((results) => {
+            console.log('##############################################################');
+            console.log(results);
+        });
+        break;
+        /*
         maxIdx = -1;
         let maxValue = -1;
         for (let i = 0; i < results.length; i++){
@@ -76,6 +98,7 @@ export function translateToText(mediapipeData){
             let outputPhrase = "Translation: " + textPhrase;
             translationText.innerText = outputPhrase;
         }
+        */
     }
 }
 
