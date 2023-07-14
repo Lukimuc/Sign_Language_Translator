@@ -1,4 +1,4 @@
-const translationText = document.getElementById('outputElement');
+const translationText = document.getElementById('translation-text');
 let model = undefined;
 let loadingModel = false;
 
