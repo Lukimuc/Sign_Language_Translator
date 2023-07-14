@@ -26,6 +26,8 @@ function getindexToCharJson(charsToIndex){
 
 async function predictTransformer(signs, context) {
     // const model = await tf.loadGraphModel('./models/ASLPredictor/model.json');
+    if (model === undefined) return;
+
     let tens = tf.tidy(()  => {
         let asTensor = tf.tensor(signs);
         return asTensor.reshape([-1, asTensor.shape[0], asTensor.shape[1]]);
@@ -35,18 +37,26 @@ async function predictTransformer(signs, context) {
         let asTensor = tf.tensor(context);
         return asTensor.reshape([-1, asTensor.shape[0]]);
     });
-
-    console.log(tens);
-    console.log(ctens);
-    model.inputNodes.forEach(node => console.log(node));
-
     
-    return model.predict({
-                'input_1': tens,
-                'input_2': ctens
-            }, {
-                batchSize: 1,
-            }).dataSync(); // Maybe this works ...
+
+    // model.inputNodes.forEach(node => console.log(node));
+
+    console.log(tens.shape);
+    console.log(ctens.shape);
+
+    const input_data = {
+        'input_1': tens,
+        'input_2': ctens
+    };
+
+    const outputTensor = await model.executeAsync(input_data);
+    const predictions = outputTensor.dataSync();
+
+    tens.dispose();
+    ctens.dispose();
+    outputTensor.dispose();
+    
+    return predictions;
 }
 
 
