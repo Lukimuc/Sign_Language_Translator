@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+      <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+      <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.1/camera_utils.js" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+   </head>
+   <body>
+      <nav>
+         <div class="nav-wrapper" style="padding: 0 20px;
+            display: flex;
+            align-items: center;
+            background-image: url("{{ url_for('static', filename='img/logo.png') }}");
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 400px; 
+            height: 50px;">
+            <a href="#" class="brand-logo"></a>
+            <ul id="nav-mobile" class="right">
+               <li><a href="#"></a></li>
+            </ul>
+         </div>
+      </nav>
+      <div class="grid-container">
+         <div class="grid-item-left content">
+            <h1 class="heading">American Sign Language (ASL) Translator</h1>
+            <p>Translate American Sign Language into text in real-time using your webcam.</p>
+            <br/>
+            <div class="video-container">
+               <div id="textOverlay">
+                  <div style="height: 100%; width: 100%; display: flex; justify-content: center; align-items:center; color:white;">
+              
+               <p>Click button below to start camera.</p>
+            </div>
+         </div>
+               <video autoplay playsinline class="input_video3" style="z-index:0; display: none;"></video>
+               <canvas class="output3"id="videoElement" >
+              </canvas>
+            </div>
+            <p id="outputElement">Translation: <br/><i id="translation-text"></i></p>
+            <button class="button" id="tb">Start Videostream</button>
+         </div>
+         <div class="grid-item-right instructions">
+            <div class="heading">Instructions</div>
+            <ol>
+               <div class="instruction-header">1. Permit access to your   <span class="material-symbols-rounded">
+                  videocam
+                  </span>
+               </div>
+               Make sure to have appropriate light conditions.
+               <br/>  
+               <div class="instruction-header">2. Press <span class="material-symbols-rounded">
+                  space_bar
+                  </span> to start translation</li>
+               </div>
+               After pressing the space bar, make sure to only use one hand.
+               <br/> 
+               <div class="instruction-header">3. Watch the   <span class="material-symbols-rounded">
+                  hand_gesture
+                  </span> translation happen</li>
+               </div>
+               In cases of bad lighting, the translation can be inaccurate.
+            </ol>
+            <div class="heading">Used Datasets</div>
+            <p>Google ASL Fingerspelling Competition: https://www.kaggle.com/competitions/asl-fingerspelling/data</p>
+            <div>
+            </div>
+            <div class="loading">
+               <div class="spinner"></div>
+            </div>
+            <div style="display: none;" class="control3">
+            </div>
+         </div>
+      </div>
+      <div class="footer">
+         <p>&copy; 2023 ASL Translator | Practical Machine Learning @LMU <br/>
+            Team 1 (Annika Köhler, Jannik Wiese, Gabriel Knoll, Lukas Schneider, Christina Trossen)
+         </p>
+      </div>
+
+      <div id="handlandmarker" src="{{ url_for('static', filename='models/hand_landmarker.task') }}">
+      <div id="armlandmarker" src="{{ url_for('static', filename='models/pose_landmarker_full.task') }}">
+
+      <script type="module" src="{{ url_for('static', filename='js/start.js') }}"></script>
+      <script type="module" src="{{ url_for('static', filename='js/preprocessing.js') }}"></script>
+      <script type="module" src="{{ url_for('static', filename='js/connector.js') }}"></script>
+      <script type="module" src="{{ url_for('static', filename='js/prediction.js') }}"></script>
+      <script type="module" src="{{ url_for('static', filename='js/armlandmarker_js') }}"></script>
+      <script type="module" src="{{ url_for('static', filename='js/handlandmarker_js') }}"></script>
+   </body>
+</html>
