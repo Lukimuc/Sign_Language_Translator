@@ -5,8 +5,7 @@ let runningMode = "VIDEO";
 
 // const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm");
 
-const createPoseLandmarker = async () => {
-    const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm");
+export async function createPoseLandmarker(vision) {
     console.log(document.getElementById('armlandmarker').getAttribute('src'));
     poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
         baseOptions: {
@@ -19,10 +18,10 @@ const createPoseLandmarker = async () => {
     console.log('Poselandmarker created');
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    console.log('DOM Content loaded in Pose');
-    createPoseLandmarker();
-});
+// document.addEventListener("DOMContentLoaded", () => {
+//     console.log('DOM Content loaded in Pose');
+//     createPoseLandmarker();
+// });
 
 let lastVideoTime = -1;
 export async function poseLandmarksForVideo(video) {

@@ -1,6 +1,6 @@
-import { DrawingUtils, HandLandmarker, PoseLandmarker } from "https://cdn.skypack.dev/@mediapipe/tasks-vision@0.10.0";
-import { poseLandmarksForVideo } from "./armLandmarker.js";
-import { handLandmarksForVideo } from "./handLandmarker.js";
+import { DrawingUtils, HandLandmarker, PoseLandmarker, FilesetResolver } from "https://cdn.skypack.dev/@mediapipe/tasks-vision@0.10.0";
+import { poseLandmarksForVideo, createPoseLandmarker } from "./armLandmarker.js";
+import { handLandmarksForVideo, createHandLandmarker} from "./handLandmarker.js";
 import { submitSample } from "./connector.js";
 
 const startButton = document.getElementById('tb');
@@ -21,8 +21,6 @@ let isDetecting = false;
 let drawingEnabled = false;
 const dataQueue = [];
 
-startButton.addEventListener('click', toggleVideostream);
-
 function sendSamples() {
     if (isDetecting && dataQueue.length > 1) {
         console.log('Sending Samples');
@@ -34,6 +32,11 @@ function sendSamples() {
     }
 }
 
+function activateStartButton() {
+    startButton.addEventListener('click', toggleVideostream);
+    startButton.disabled = false;
+}
+
 function toggleVideostream() {
     if (isStreaming) {
         stopStream();
@@ -43,6 +46,19 @@ function toggleVideostream() {
         timer = setInterval(sendSamples, 1000);
     }
 }
+
+document.addEventListener("DOMContentLoaded", async () => {
+    console.log('DOM loaded in start');
+    const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm");
+    Promise.all([
+        createHandLandmarker(vision),
+        createPoseLandmarker(vision)
+    ]).then(() => { 
+        console.log("landmarkers loaded, activate StartButton");
+        activateStartButton();
+    })
+   
+});
 
 document.addEventListener('keydown', function(event) {
     if (event.code === 'Space') {

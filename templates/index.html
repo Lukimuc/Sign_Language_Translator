@@ -40,7 +40,7 @@
               </canvas>
             </div>
             <p id="outputElement">Translation: <br/><i id="translation-text"></i></p>
-            <button class="button" id="tb">Start Videostream</button>
+            <button class="button" id="tb" disabled>Start Videostream</button>
          </div>
          <div class="grid-item-right instructions">
             <div class="heading">Instructions</div>
@@ -87,7 +87,7 @@
       <script type="module" src="{{ url_for('static', filename='js/preprocessing.js') }}"></script>
       <script type="module" src="{{ url_for('static', filename='js/connector.js') }}"></script>
       <script type="module" src="{{ url_for('static', filename='js/prediction.js') }}"></script>
-      <script type="module" src="{{ url_for('static', filename='js/armlandmarker_js') }}"></script>
-      <script type="module" src="{{ url_for('static', filename='js/handlandmarker_js') }}"></script>
+      <script type="module" src="{{ url_for('static', filename='js/armlandmarker.js') }}"></script>
+      <script type="module" src="{{ url_for('static', filename='js/handlandmarker.js') }}"></script>
    </body>
 </html>
