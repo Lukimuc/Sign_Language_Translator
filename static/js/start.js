@@ -7,6 +7,7 @@ const startButton = document.getElementById('tb');
 const textOverlay = document.getElementById('textOverlay');
 const videoElement = document.getElementById('videoElement');
 const outputElement = document.getElementById('outputElement');
+const outWrapper = document.getElementById('outputWrapper')
 const video3 = document.getElementsByClassName('input_video3')[0];
 const out3 = document.getElementsByClassName('output3')[0];
 const canvasCtx3 = out3.getContext('2d');
@@ -121,6 +122,8 @@ async function startStream() {
     } else {
         console.log('getUserMedia is not supported');
     }
+
+    outWrapper.style.width = getComputedStyle(video3).width
 }
 
 function setupDetection() {
