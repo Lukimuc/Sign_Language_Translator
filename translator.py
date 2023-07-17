@@ -39,7 +39,7 @@ class Translator:
         signs = signs[tf.newaxis]
 
         start = np.array([60])
-        end = np.array([61])
+        end = np.array([59])
         pad = np.array([59])
 
         output = tf.TensorArray(dtype=tf.int64, size=0, dynamic_size=True)
@@ -50,7 +50,6 @@ class Translator:
             while context.size() < 100:
                 context = context.write(context.size(), end)
             context = tf.transpose(context.stack())
-            print('Doing prediction')
             predictions = self.transformer([signs, context], training=False)
 
             predictions = predictions[:, -1:, :]
