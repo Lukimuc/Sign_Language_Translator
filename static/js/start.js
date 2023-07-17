@@ -1,12 +1,13 @@
-import { DrawingUtils, HandLandmarker, PoseLandmarker } from "https://cdn.skypack.dev/@mediapipe/tasks-vision@0.10.0";
-import { poseLandmarksForVideo } from "./armLandmarker.js";
-import { handLandmarksForVideo } from "./handLandmarker.js";
+import { DrawingUtils, HandLandmarker, PoseLandmarker, FilesetResolver } from "https://cdn.skypack.dev/@mediapipe/tasks-vision@0.10.0";
+import { poseLandmarksForVideo, createPoseLandmarker } from "./armLandmarker.js";
+import { handLandmarksForVideo, createHandLandmarker} from "./handLandmarker.js";
 import { submitSample } from "./connector.js";
 
 const startButton = document.getElementById('tb');
 const textOverlay = document.getElementById('textOverlay');
 const videoElement = document.getElementById('videoElement');
 const outputElement = document.getElementById('outputElement');
+const outWrapper = document.getElementById('outputWrapper')
 const video3 = document.getElementsByClassName('input_video3')[0];
 const out3 = document.getElementsByClassName('output3')[0];
 const canvasCtx3 = out3.getContext('2d');
@@ -15,13 +16,11 @@ const drawingUtils = new DrawingUtils(canvasCtx3);
 let isStreaming = false;
 let camera = undefined;
 let timer = undefined;
-let isFirstSpacebarClick = true;
 let isKeyDown = false;
 let isDetecting = false;
 let drawingEnabled = false;
+let stream 
 const dataQueue = [];
-
-startButton.addEventListener('click', toggleVideostream);
 
 function sendSamples() {
     if (isDetecting && dataQueue.length > 1) {
@@ -34,6 +33,11 @@ function sendSamples() {
     }
 }
 
+function activateStartButton() {
+    startButton.addEventListener('click', toggleVideostream);
+    startButton.disabled = false;
+}
+
 function toggleVideostream() {
     if (isStreaming) {
         stopStream();
@@ -44,21 +48,29 @@ function toggleVideostream() {
     }
 }
 
+document.addEventListener("DOMContentLoaded", async () => {
+    console.log('DOM loaded in start');
+    const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm");
+    stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+    setupDetection();
+    Promise.all([
+        createHandLandmarker(vision),
+        createPoseLandmarker(vision)
+    ]).then(() => { 
+        console.log("landmarkers loaded, activate StartButton");
+        activateStartButton();
+    })
+   
+});
+
 document.addEventListener('keydown', function(event) {
     if (event.code === 'Space') {
       if (!isKeyDown) {
         isKeyDown = true;
         console.log("Spacebar pressed");
         if (!isDetecting) {
-          isDetecting = true;
-          setupDetection();
+          isDetecting = true; 
         }
-
-        if (isFirstSpacebarClick) {
-            textOverlay.textContent = 'Landmarks loading... Please remain pressing the spacebar.';
-            textOverlay.style.color = 'grey';
-            isFirstSpacebarClick = false;
-          }
       } else {
         drawingEnabled = true;
       }
@@ -79,12 +91,7 @@ document.addEventListener('keydown', function(event) {
 async function startStream() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
             video3.srcObject = stream;
-
-            await new Promise((resolve) => {
-                video3.onloadedmetadata = resolve;
-            });
 
             video3.style.width = '100%';
             video3.style.height = '100%';
@@ -105,6 +112,7 @@ async function startStream() {
     } else {
         console.log('getUserMedia is not supported');
     }
+    outWrapper.style.width = getComputedStyle(video3).width
 }
 
 function setupDetection() {

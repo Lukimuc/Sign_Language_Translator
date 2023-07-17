@@ -1,26 +1,23 @@
-import { HandLandmarker, FilesetResolver } from "https://cdn.skypack.dev/@mediapipe/tasks-vision@0.10.0";
+import { HandLandmarker } from "https://cdn.skypack.dev/@mediapipe/tasks-vision@0.10.0";
 
 let handLandmarker = undefined
 let runningMode = "VIDEO";
 
-const createHandLandmarker = async () => {
-    const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm");
-    console.log(document.getElementById('handlandmarker').getAttribute('src'))
-    handLandmarker = await HandLandmarker.createFromOptions(vision, {
-        baseOptions: {
-            modelAssetPath: document.getElementById('handlandmarker').getAttribute('src'),
-            delegate: "GPU"
-        },
-        runningMode: runningMode,
-        numHands: 2
-    });
-    console.log('Handlandmarker created');
+export async function createHandLandmarker(vision) {  
+    return new Promise(async (resolve, _) => {
+        console.log(document.getElementById('handlandmarker').getAttribute('src'))
+        handLandmarker = await HandLandmarker.createFromOptions(vision, {
+            baseOptions: {
+                modelAssetPath: document.getElementById('handlandmarker').getAttribute('src'),
+                delegate: "GPU"
+            },
+            runningMode: runningMode,
+            numHands: 2
+        });
+        console.log('Handlandmarker created');
+        resolve()
+    })
 };
-
-document.addEventListener("DOMContentLoaded", () => {
-    console.log('DOM loaded in hand');
-  createHandLandmarker();
-});
 
 let lastVideoTime = -1;
 let results = undefined;
