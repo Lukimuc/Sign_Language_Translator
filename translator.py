@@ -17,7 +17,7 @@ class Translator:
         ff_dim = 389  # how many neurons shall feed-forward layers have
         dropout_rate = 0.2867
 
-        output_vocab_size = len(self.characters) + 2
+        output_vocab_size = len(self.characters) + 2  # TODO: Change with new model
         print(output_vocab_size)
         self.transformer = get_compiled_transformer(
             sign_shape=(900, 144),
@@ -39,7 +39,8 @@ class Translator:
         signs = signs[tf.newaxis]
 
         start = np.array([60])
-        end = np.array([59])
+        end = np.array([61])
+        pad = np.array([59])
 
         output = tf.TensorArray(dtype=tf.int64, size=0, dynamic_size=True)
         output = output.write(0, start)
@@ -56,22 +57,19 @@ class Translator:
             predicted = tf.argmax(predictions, axis=-1)
             output = output.write(i + 1, predicted[0])
 
-            if predicted == end:
+            if predicted == end or predicted == pad:
                 break
 
         output_tensor = output.stack()
         output_array = output_tensor.numpy()
-        print(output_array)
 
         output_list = output_array.reshape((-1, )).tolist()
-        print('Output list:')
-        print(output_list)
 
         translation = ''
         for o in output_list:
             if o == 60:
                 continue
-            if o == 59:
+            if o == 59 or o == 61:
                 break
             translation += list(self.characters.keys())[list(self.characters.values()).index(o)]
 

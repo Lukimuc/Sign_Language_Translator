@@ -1,3 +1,7 @@
+import mimetypes
+mimetypes.add_type('text/javascript', '.js')
+mimetypes.add_type('text/css', '.css')
+
 from flask import Flask, render_template, request, jsonify
 from translator import Translator
 import json
